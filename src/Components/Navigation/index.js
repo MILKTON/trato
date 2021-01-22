@@ -18,7 +18,7 @@ const Navigation = () => {
       <NavbarBrand href="/">Trato</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-          <Nav className="mr-auto" navbar>
+          <Nav navbar className="container-fluid">
           <NavItem>
             <NavLink
             exact
@@ -38,12 +38,12 @@ const Navigation = () => {
               Transfer
             </NavLink>
           </NavItem>
-          <NavItem>
+          <NavItem  className="ml-auto">
             <NavLink
             exact
             activeClassName="navbar__link--active"
             className="nav-link"
-            to="/login">Login</NavLink>
+            to="/login">Logout</NavLink>
           </NavItem>
         </Nav>
       </Collapse>

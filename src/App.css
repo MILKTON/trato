@@ -1,3 +1,7 @@
+body,html, #root{
+  height: 100%;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -22,7 +26,6 @@ html {
   margin-bottom: 25px;
 }
 
-
 .nav-link {
   display: block;
   padding: .5rem 1rem;
@@ -32,8 +35,85 @@ html {
   color: rgba(0,0,0,.5);
 }
 
-
 .navbar__link--active {
   border-bottom: 3px solid #29b6f6;
   transition: border-bottom .1s ease-in-out;
 }
+
+
+/* LOGIN */
+.form-login {
+  background-color: #FFF;
+  padding: 2em 2em 0em 2em;
+  border-radius: 8px;
+  max-width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 10px 40px -14px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.form-login input {
+  color: #384047;
+  background-color: hsl(210, 17%, 98%);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 1.2em;
+  width: 100%;
+}
+
+.form-login input:focus {
+  outline: none;
+}
+
+.buttonLogin {
+  font-weight: 600;
+  text-align: center;
+  font-size: 19px;
+  color: #FFF;
+  background-color: #1b3f7c;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  padding: 0.8em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 200ms ease-in-out;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.buttonLogin:hover {
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px);
+}
+
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for vh unit */
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex; 
+  -webkit-box-align : center;
+  -webkit-align-items : center;
+  -moz-box-align : center;
+  -ms-flex-align : center;
+  align-items : center;
+  width: 100%;
+  -webkit-box-pack : center;
+  -moz-box-pack : center;
+  -ms-flex-pack : center;
+  -webkit-justify-content : center;
+  justify-content : center;
+}
+
+/* LOGIN */

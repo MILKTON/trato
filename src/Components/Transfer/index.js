@@ -173,7 +173,7 @@ const Transfer = () => {
 
     return (
       <div>
-        <Row>
+      <Row className="m-0">
         <Col sm="12" md="4">
           <Card>
             <CardBody>
@@ -194,7 +194,7 @@ const Transfer = () => {
    
         </Col>
         </Row>
-        <Row>
+        <Row className="m-0">
         <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
        <thead>
          {headerGroups.map(headerGroup => (

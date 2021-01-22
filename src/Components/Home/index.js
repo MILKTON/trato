@@ -3,10 +3,13 @@ import { Row, Col } from 'reactstrap';
 import CurrentBalance from './CurrentBalance'
 import MainExpenses from './MainExpenses'
 import TransactionHistory from './TransactionHistory'
+import { useHistory } from 'react-router-dom';
 
 const Home = () => {
+    const history = useHistory();
+    //console.log(history.location.state.name)
     return (
-      <Row>
+      <Row className="m-0">
         <Col sm="12" md="4">
           <TransactionHistory/>
         </Col>
