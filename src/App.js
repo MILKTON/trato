@@ -1,26 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
-import { Button } from 'reactstrap';
-
+import Navigation from './Components/Navigation';
+import Footer from './Components/Footer';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Transfer from './Components/Transfer';
+import Home from './Components/Home';
+import { PrivateRoute } from './_components/';
+import LoginPage from './Components/LoginPage'
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <Button color="danger">Danger!</Button>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    < >
+      <Navigation/>
+      <Router>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/transfer" component={Transfer} />
+        <Route path="/login" component={LoginPage} />
+      </Router>
+      <Footer/>
+    </>
   );
 }
 
