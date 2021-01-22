@@ -21,3 +21,19 @@ html {
 .navbar{
   margin-bottom: 25px;
 }
+
+
+.nav-link {
+  display: block;
+  padding: .5rem 1rem;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: rgba(0,0,0,.5);
+}
+
+
+.navbar__link--active {
+  border-bottom: 3px solid #29b6f6;
+  transition: border-bottom .1s ease-in-out;
+}
