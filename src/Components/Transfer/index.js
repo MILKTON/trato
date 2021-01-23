@@ -6,59 +6,6 @@ import { useForm } from "react-hook-form";
 import { PieChart } from 'react-minimal-pie-chart'
 import { useTable } from 'react-table'
 
-const transactionHistory = [
-  {
-    "transactions":[
-       {
-          "fromAccount":123456789,
-          "toAccount":192837465,
-          "amount":{
-             "currency":"€",
-             "value":876.88
-          },
-          "sentAt":"2012-04-23T18:25:43.511Z"
-       },
-       {
-          "fromAccount":123456789,
-          "toAccount":192837465,
-          "amount":{
-             "currency":"€",
-             "value":654.88
-          },
-          "sentAt":"2012-04-21T18:25:43.511Z"
-       },
-       {
-          "fromAccount":987654321,
-          "toAccount":543216789,
-          "amount":{
-             "currency":"$",
-             "value":543
-          },
-          "sentAt":"2012-04-23T18:25:43.511Z"
-       },
-       {
-          "fromAccount":987654321,
-          "toAccount":543216789,
-          "amount":{
-             "currency":"$",
-             "value":987.54
-          },
-          "sentAt":"2012-04-23T18:25:43.511Z"
-       }
-    ]
- }
-];
-
-const columns = [
-    {
-      Header: 'fromAccount 1',
-      accessor: 'fromAccount', // accessor is the "key" in the data
-    },
-    {
-      Header: 'toAccount 2',
-      accessor: 'toAccount',
-    },
-  ]
 
 const Input = ({ label, register, required }) => (
   <>
@@ -80,96 +27,74 @@ const Select = React.forwardRef(({ label }, ref) => (
 
 
 const Transfer = () => {
-
-  const data2 = React.useMemo(
+  const transactionHistory = React.useMemo(
     () => [
-      {
-        col1: 'Hello',
-        col2: 'World',
-      },
-      {
-        col1: 'react-table',
-        col2: 'rocks',
-      },
-      {
-        col1: 'whatever',
-        col2: 'you want',
-      },
-    ],
-    []
-  )
 
-  const data = React.useMemo(
-    () => [
-         {
-            "fromAccount":123456789,
-            "toAccount":192837465,
-            "amount":{
-               "currency":"€",
-               "value":876.88
-            },
-            "sentAt":"2012-04-23T18:25:43.511Z"
-         },
-         {
-            "fromAccount":123456789,
-            "toAccount":192837465,
-            "amount":{
-               "currency":"€",
-               "value":654.88
-            },
-            "sentAt":"2012-04-21T18:25:43.511Z"
-         },
-         {
-            "fromAccount":987654321,
-            "toAccount":543216789,
-            "amount":{
-               "currency":"$",
-               "value":543
-            },
-            "sentAt":"2012-04-23T18:25:43.511Z"
-         },
-         {
-            "fromAccount":987654321,
-            "toAccount":543216789,
-            "amount":{
-               "currency":"$",
-               "value":987.54
-            },
-            "sentAt":"2012-04-23T18:25:43.511Z"
-         }
+             {
+                "fromAccount":123456789,
+                "toAccount":192837465,
+                "amount":{
+                   "currency":"€",
+                   "value":876.88
+                },
+                "sentAt":"2012-04-23T18:25:43.511Z"
+             },
+             {
+                "fromAccount":123456789,
+                "toAccount":192837465,
+                "amount":{
+                   "currency":"€",
+                   "value":654.88
+                },
+                "sentAt":"2012-04-21T18:25:43.511Z"
+             },
+             {
+                "fromAccount":987654321,
+                "toAccount":543216789,
+                "amount":{
+                   "currency":"$",
+                   "value":543
+                },
+                "sentAt":"2012-04-23T18:25:43.511Z"
+             },
+             {
+                "fromAccount":987654321,
+                "toAccount":543216789,
+                "amount":{
+                   "currency":"$",
+                   "value":987.54
+                },
+                "sentAt":"2012-04-23T18:25:43.511Z"
+             }
   ]);
   
     
 
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Column 1',
-        accessor: 'fromAccount', // accessor is the "key" in the data
-      },
-      {
-        Header: 'Column 2',
-        accessor: 'toAccount',
-      },
-    ],
-    []
-  )
-
   const { register, handleSubmit } = useForm();
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({ columns, data })
-
-  console.log(data)
-  console.log(data2)
   const onSubmit = data => {
-    alert(JSON.stringify(data));
+    alert(JSON.stringify(transactionHistory));
   };
+
+  const requiredDataFromResponse = transactionHistory;
+  console.log(requiredDataFromResponse)
+  const datas = requiredDataFromResponse.map(eachSensorItem => (
+    {
+    fromAccount: eachSensorItem.fromAccount,
+    toAccount: eachSensorItem.toAccount,
+    sentAt: eachSensorItem.sentAt,
+    amount: eachSensorItem.amount.value,
+    currency: eachSensorItem.amount.currency,
+
+  }));
+
+    let result = datas.reduce(function (r, a) {
+        r[a.fromAccount] = r[a.fromAccount] || [];
+        r[a.fromAccount].push(a);
+        return r;
+    }, Object.create(null));
+
+
 
     return (
       <div>
@@ -191,54 +116,48 @@ const Transfer = () => {
           </Card>
         </Col>
         <Col sm="12" md="8">
-   
+
+          {Object.entries(result).map( ([key, value]) => 
+            value.map((value) => 
+              <div key="value">
+                <span>{value.fromAccount} |</span>
+                <span>{value.toAccount} |</span>
+                <span>{value.sentAt} |</span>
+                <span>{value.currency} |</span>
+                <span>{value.amount} |</span>
+              </div>
+          ))}
+
+{Object.keys(result).map(i => result[i] ).map((item,i) => {
+  return (
+    <table key={item[i].amount}>
+      <thead>
+      <tr>
+          <td>fromAccount</td>
+          <td>toAccount</td>
+          <td>sentAt</td>
+          <td>amount</td>
+          <td>currency</td>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr>
+          <td>{item[i].fromAccount}</td>
+          <td>{item[i].toAccount}</td>
+          <td>{item[i].sentAt}</td>
+          <td>{item[i].amount}</td>
+          <td>{item[i].currency}</td>
+      </tr>
+      </tbody>
+
+  </table>
+  )
+})}
         </Col>
         </Row>
         <Row className="m-0">
-        <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
-       <thead>
-         {headerGroups.map(headerGroup => (
-           <tr {...headerGroup.getHeaderGroupProps()}>
-             {headerGroup.headers.map(column => (
-               <th
-                 {...column.getHeaderProps()}
-                 style={{
-                   borderBottom: 'solid 3px red',
-                   background: 'aliceblue',
-                   color: 'black',
-                   fontWeight: 'bold',
-                 }}
-               >
-                 {column.render('Header')}
-               </th>
-             ))}
-           </tr>
-         ))}
-       </thead>
-       <tbody {...getTableBodyProps()}>
-         {rows.map(row => {
-           prepareRow(row)
-           return (
-             <tr {...row.getRowProps()}>
-               {row.cells.map(cell => {
-                 return (
-                   <td
-                     {...cell.getCellProps()}
-                     style={{
-                       padding: '10px',
-                       border: 'solid 1px gray',
-                       background: 'papayawhip',
-                     }}
-                   >
-                     {cell.render('Cell')}
-                   </td>
-                 )
-               })}
-             </tr>
-           )
-         })}
-       </tbody>
-     </table>
+
         </Row>
 
       </div>

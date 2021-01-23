@@ -6,7 +6,7 @@ import TransactionHistory from './TransactionHistory'
 import { useHistory } from 'react-router-dom';
 
 const Home = () => {
-    const history = useHistory();
+    //const history = useHistory();
     //console.log(history.location.state.name)
     return (
       <Row className="m-0">
