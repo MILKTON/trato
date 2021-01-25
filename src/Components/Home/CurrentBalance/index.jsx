@@ -1,47 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
-import { Table } from 'reactstrap';
+import { Table } from "reactstrap";
+import { Card, CardImg, CardText, CardBody, CardTitle } from "reactstrap";
 
 const API_DATA_RETURNED = [
   {
-    "fromAccount":123456789,
-    "toAccount":192837465,
-    "amount":{
-       "currency":"€",
-       "value":876.88
+    fromAccount: 123456789,
+    toAccount: 192837465,
+    amount: {
+      currency: "€",
+      value: 876.88
     },
-    "sentAt":"2012-04-23T18:25:43.511Z"
+    sentAt: "2012-04-23T18:25:43.511Z"
   },
   {
-    "fromAccount":123456789,
-    "toAccount":192837465,
-    "amount":{
-       "currency":"€",
-       "value":654.88
+    fromAccount: 123456789,
+    toAccount: 192837465,
+    amount: {
+      currency: "€",
+      value: 654.88
     },
-    "sentAt":"2012-04-21T18:25:43.511Z"
- },
- {
-    "fromAccount":987654321,
-    "toAccount":543216789,
-    "amount":{
-       "currency":"$",
-       "value":543
+    sentAt: "2012-04-21T18:25:43.511Z"
+  },
+  {
+    fromAccount: 987654321,
+    toAccount: 543216789,
+    amount: {
+      currency: "$",
+      value: 543
     },
-    "sentAt":"2012-04-23T18:25:43.511Z"
- },
- {
-    "fromAccount":987654321,
-    "toAccount":543216789,
-    "amount":{
-       "currency":"$",
-       "value":987.54
+    sentAt: "2012-04-23T18:25:43.511Z"
+  },
+  {
+    fromAccount: 987654321,
+    toAccount: 543216789,
+    amount: {
+      currency: "$",
+      value: 987.54
     },
-    "sentAt":"2012-04-23T18:25:43.511Z"
- }
+    sentAt: "2012-04-23T18:25:43.511Z"
+  }
 ];
-
-
 
 // This is custom mock axios
 const axios = () => {
@@ -51,7 +50,6 @@ const axios = () => {
     }, 3000);
   });
 };
-
 
 function SensorTable({ columns, data }) {
   const {
@@ -64,16 +62,12 @@ function SensorTable({ columns, data }) {
 
   // Render the UI for your table
   return (
-    <Table bordered responsive size="sm" {...getTableProps()} >
+    <Table bordered responsive size="sm" {...getTableProps()}>
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
-              <th
-                {...column.getHeaderProps()}
-              >
-                {column.render("Header")}
-              </th>
+              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
             ))}
           </tr>
         ))}
@@ -84,13 +78,7 @@ function SensorTable({ columns, data }) {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map(cell => {
-                return (
-                  <td
-                    {...cell.getCellProps()}
-                  >
-                    {cell.render("Cell")}
-                  </td>
-                );
+                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
               })}
             </tr>
           );
@@ -110,14 +98,12 @@ function SensorContainer() {
     axios()
       .then(response => {
         const requiredDataFromResponse = response.data;
-        const data = requiredDataFromResponse.map(eachSensorItem => (
-          {
-          fromAccount: eachSensorItem.fromAccount,
-          toAccount: eachSensorItem.toAccount,
-          sentAt: eachSensorItem.sentAt,
-          amount: eachSensorItem.amount.value,
-          currency: eachSensorItem.amount.currency,
-
+        const data = requiredDataFromResponse.map(e => ({
+          fromAccount: e.fromAccount,
+          toAccount: e.toAccount,
+          sentAt: e.sentAt,
+          amount: e.amount.value,
+          currency: e.amount.currency
         }));
         setSensors(data);
       })
@@ -144,7 +130,8 @@ function SensorContainer() {
       },
       {
         Header: "Amount",
-        accessor: "amount"
+        accessor: "amount",
+        aggregate: vals => {console.log(vals)},
       },
       {
         Header: "sentAt",
@@ -167,12 +154,14 @@ function SensorContainer() {
 }
 
 const CurrentBalance = () => {
-    return (
-      <div>
-        <h2>CurrentBalance</h2>
+  return (
+    <Card className="text-justify">
+      <CardTitle tag="h2">Current Balance</CardTitle>
+      <CardBody>
         <SensorContainer />
-      </div>
-    );
-}
+      </CardBody>
+    </Card>
+  );
+};
 
 export default CurrentBalance;
