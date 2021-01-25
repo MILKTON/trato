@@ -5,6 +5,7 @@ import { Card,CardBody, CardTitle } from 'reactstrap';
 import { useForm } from "react-hook-form";
 import { PieChart } from 'react-minimal-pie-chart'
 import { useTable } from 'react-table'
+import { Table } from 'reactstrap';
 
 
 const Input = ({ label, register, required }) => (
@@ -77,7 +78,6 @@ const Transfer = () => {
   };
 
   const requiredDataFromResponse = transactionHistory;
-  console.log(requiredDataFromResponse)
   const datas = requiredDataFromResponse.map(eachSensorItem => (
     {
     fromAccount: eachSensorItem.fromAccount,
@@ -88,12 +88,12 @@ const Transfer = () => {
 
   }));
 
+
     let result = datas.reduce(function (r, a) {
         r[a.fromAccount] = r[a.fromAccount] || [];
         r[a.fromAccount].push(a);
         return r;
     }, Object.create(null));
-
 
 
     return (
@@ -117,43 +117,38 @@ const Transfer = () => {
         </Col>
         <Col sm="12" md="8">
 
-          {Object.entries(result).map( ([key, value]) => 
-            value.map((value) => 
-              <div key="value">
-                <span>{value.fromAccount} |</span>
-                <span>{value.toAccount} |</span>
-                <span>{value.sentAt} |</span>
-                <span>{value.currency} |</span>
-                <span>{value.amount} |</span>
-              </div>
-          ))}
+        {Object.entries(result).map( ([key, value]) => {
+          return <div key={key}>
+          <Table bordered size="sm">
+          <thead>
+            <tr>
+              <th>fromAccount</th>
+              <th>toAccount</th>
+              <th>sentAt</th>
+              <th>currency</th>
+              <th>amount</th>
+            </tr>
+          </thead>
+          <tbody>
+          {value.map(
+            (val,index) => {
+              return <tr key={index}>
+                  <td key="1">{value[index].fromAccount}</td>
+                  <td key="2">{value[index].toAccount}</td>
+                  <td key="3">{value[index].sentAt}</td>
+                  <td key="4">{value[index].currency}</td>
+                  <td key="5">{value[index].amount}</td>
+                </tr>
+            }
+          )}
+          </tbody>
+        </Table>
+          <hr></hr>
+        </div>
+                
+                }
+          )}
 
-{Object.keys(result).map(i => result[i] ).map((item,i) => {
-  return (
-    <table key={item[i].amount}>
-      <thead>
-      <tr>
-          <td>fromAccount</td>
-          <td>toAccount</td>
-          <td>sentAt</td>
-          <td>amount</td>
-          <td>currency</td>
-      </tr>
-      </thead>
-      <tbody>
-
-      <tr>
-          <td>{item[i].fromAccount}</td>
-          <td>{item[i].toAccount}</td>
-          <td>{item[i].sentAt}</td>
-          <td>{item[i].amount}</td>
-          <td>{item[i].currency}</td>
-      </tr>
-      </tbody>
-
-  </table>
-  )
-})}
         </Col>
         </Row>
         <Row className="m-0">
