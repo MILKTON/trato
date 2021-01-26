@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PieChart } from 'react-minimal-pie-chart';
-import {
-  Card, CardImg, CardText, CardBody,
-  CardTitle
-} from 'reactstrap';
+import { Card, CardText, CardBody, CardTitle } from 'reactstrap';
 const API_DATA_RETURNED = [
   {
     "fromAccount":123456789,
@@ -44,25 +41,20 @@ const API_DATA_RETURNED = [
 ];
 
 
-
-// This is custom mock axios
 const axios = () => {
   return new Promise(res => {
     setTimeout(() => {
       return res({ data: API_DATA_RETURNED });
-    }, 3000);
+    }, 2000);
   });
 };
 
-
-
 function TransactionHistory() {
-  const [sensors, setSensors] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    // GET sensor list from API
     axios()
       .then(response => {
         const requiredDataFromResponse = response.data;
@@ -73,11 +65,10 @@ function TransactionHistory() {
           sentAt: eachSensorItem.sentAt,
           amount: eachSensorItem.amount.value,
           currency: eachSensorItem.amount.currency,
-
         }));
 
       let holder = {};
-      
+     
       data.forEach(d => {
         if (holder.hasOwnProperty(d.toAccount)) {
           holder[d.toAccount] = holder[d.toAccount] + d.amount;
@@ -92,29 +83,30 @@ function TransactionHistory() {
       for (var prop in holder) {
         obj2.push({ title: prop, value: holder[prop], color:colors[i]});
         i++
-        //{ title: 'One', value: 10, color: '#E38627' },
       }
-        setSensors(obj2);
+        setData(obj2);
       })
       .catch(error => {
-        setSensors([]); // reset the [] here - this is optional and is based on expected behaviour
+        setData([]);
       })
       .finally(() => setLoading(false));
-  }, []); // This is self is componentDidMount
+  }, []);
 
 
   return (
     <Card className="text-justify"> 
-    <CardBody>
-    <PieChart data={sensors}  
-                label={({ dataEntry }) => ("Account:"+dataEntry.title+"Total: "+dataEntry.value)}
-                labelStyle={(index) => ({
-                  fontSize: '4px',
-                })}
-                />
-      <CardTitle tag="h2">Transaction History</CardTitle>
-      <CardText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris suscipit in sapien eu pretium. Pellentesque fermentum varius risus, a commodo ipsum fermentum a. Nam sed hendrerit mi, non dignissim diam. Nullam at erat cursus, egestas tellus eu, facilisis sem. In hac habitasse platea dictumst. In a luctus lacus. Nam rutrum ligula quis diam sodales molestie. Integer vel commodo lacus. Fusce quis accumsan justo. Etiam est erat, auctor ut ornare quis, pharetra eget lectus. Aliquam vel elit sit amet nibh placerat vehicula. Integer consequat ligula ut consequat viverra.</CardText>
-    </CardBody>
+      <CardBody>
+        {loading ?
+          <span>... Loading chart</span> :
+          <PieChart data={data}  
+            style={{ height: '450px', top: 20 }}
+            label={({ dataEntry }) => ("Account:"+dataEntry.title+"Total: "+dataEntry.value)}
+            labelStyle={(index) => ({ fontSize: '4px' })} 
+          />
+        }
+        <CardTitle tag="h2">Transaction History</CardTitle>
+        <CardText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris suscipit in sapien eu pretium. Pellentesque fermentum varius risus, a commodo ipsum fermentum a. Nam sed hendrerit mi, non dignissim diam. Nullam at erat cursus, egestas tellus eu, facilisis sem. In hac habitasse platea dictumst. In a luctus lacus. Nam rutrum ligula quis diam sodales molestie. Integer vel commodo lacus. Fusce quis accumsan justo. Etiam est erat, auctor ut ornare quis, pharetra eget lectus. Aliquam vel elit sit amet nibh placerat vehicula. Integer consequat ligula ut consequat viverra.</CardText>
+      </CardBody>
     </Card>
   );
 

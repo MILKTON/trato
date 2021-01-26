@@ -1,13 +1,6 @@
 
 import React, { useState } from 'react';
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-} from 'reactstrap';
+import { Collapse,Navbar,NavbarToggler,NavbarBrand,Nav,NavItem } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
 const Navigation = () => {
@@ -15,7 +8,7 @@ const Navigation = () => {
     const toggle = () => setIsOpen(!isOpen);
     return (
       <Navbar color="light" light expand="md">
-      <NavbarBrand href="/">Trato</NavbarBrand>
+      <NavbarBrand>Trato</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav navbar className="container-fluid">

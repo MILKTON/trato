@@ -1,5 +1,7 @@
 body,html, #root{
   height: 100%;
+  margin: 0;
+
 }
 
 /* Sticky footer styles
@@ -8,10 +10,7 @@ html {
   position: relative;
   min-height: 100%;
 }
-.container {
-  /* Margin bottom by footer height */
-  margin-bottom: 80px;
-}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -116,3 +115,4 @@ html {
 }
 
 /* LOGIN */
+

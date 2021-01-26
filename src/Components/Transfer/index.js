@@ -1,87 +1,97 @@
-import React from "react";
+import React, {useState} from "react";
 import { Row, Col } from "reactstrap";
 import { Card, CardBody, CardTitle } from "reactstrap";
 import { useForm } from "react-hook-form";
-import { Table } from "reactstrap";
+import { Table, FormGroup, Button } from "reactstrap";
 
-const Input = ({ label, register, required }) => (
+const Input = ({ label, register, id}) => (
   <>
-    <label>{label}</label>
-    <input name={label} ref={register({ required })} />
+    <label htmlFor={label}>{label}</label>
+    <input className="form-control" name={id} required ref={register({
+                      maxLength: {
+                        value: 9
+                      }
+    })} />
   </>
 );
 
-// you can use React.forwardRef to pass the ref too
-const Select = React.forwardRef(({ label }, ref) => (
+const Select = React.forwardRef(({ label, id }, ref) => (
   <>
-    <label>{label}</label>
-    <select name={label} ref={ref}>
-      <option value="20">20</option>
-      <option value="30">30</option>
+    <label htmlFor={id}>{label}</label>
+    <select className="form-control" name={id} ref={ref}>
+      <option value="123456789">123456789</option>
+      <option value="987654321">987654321</option>
     </select>
   </>
 ));
 
 const Transfer = () => {
-  const transactionHistory = React.useMemo(() => [
+  const transactionHistory = [
     {
       fromAccount: 123456789,
       toAccount: 192837465,
       amount: {
         currency: "€",
-        value: 876.88,
+        value: 876.88
       },
-      sentAt: "2012-04-23T18:25:43.511Z",
+      sentAt: "2012-04-23T18:25:43.511Z"
     },
     {
       fromAccount: 123456789,
       toAccount: 192837465,
       amount: {
         currency: "€",
-        value: 654.88,
+        value: 654.88
       },
-      sentAt: "2012-04-21T18:25:43.511Z",
+      sentAt: "2012-04-21T18:2  :43.511Z"
     },
     {
       fromAccount: 987654321,
       toAccount: 543216789,
       amount: {
         currency: "$",
-        value: 543,
+        value: 543
       },
-      sentAt: "2012-04-23T18:25:43.511Z",
+      sentAt: "2012-04-23T18:25:43.511Z"
     },
     {
       fromAccount: 987654321,
       toAccount: 543216789,
       amount: {
         currency: "$",
-        value: 987.54,
+        value: 987.54
       },
-      sentAt: "2012-04-23T18:25:43.511Z",
-    },
-  ]);
+      sentAt: "2012-04-23T18:25:43.511Z"
+    }
+  ];
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit} = useForm();
 
-  const onSubmit = (data) => {
-    alert(JSON.stringify(transactionHistory));
+  const onSubmit = (payload, e) =>  {
+    alert(JSON.stringify(payload));
+    e.target.reset();
+    result[payload.fromAccount].push({fromAccount: payload.fromAccount, toAccount: payload.toAccount, sentAt: new Date().toISOString(), amount: payload.amount, currency: "€"});
   };
 
+
   const requiredDataFromResponse = transactionHistory;
-  const datas = requiredDataFromResponse.map((eachSensorItem) => ({
+  const data = requiredDataFromResponse.map(eachSensorItem => ({
     fromAccount: eachSensorItem.fromAccount,
     toAccount: eachSensorItem.toAccount,
     sentAt: eachSensorItem.sentAt,
     amount: eachSensorItem.amount.value,
-    currency: eachSensorItem.amount.currency,
+    currency: eachSensorItem.amount.currency
   }));
 
-  let result = datas.reduce(function (r, a) {
-    r[a.fromAccount] = r[a.fromAccount] || [];
-    r[a.fromAccount].push(a);
-    return r;
-  }, Object.create(null));
+  const [result, setResult] = useState(() => {
+    let result = data.reduce(function (r, a) {
+      r[a.fromAccount] = r[a.fromAccount] || [];
+      r[a.fromAccount].push(a);
+      return r;
+    }, Object.create(null));
+    return result;
+  });
+  
 
   return (
     <div>
@@ -93,23 +103,31 @@ const Transfer = () => {
                 Create new transfer
               </CardTitle>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <Select label="Select origin account" ref={register} />
-                <br></br>
-                <Input
-                  label="Destination account"
-                  register={register}
-                  required
-                />
-                <br></br>
+                <FormGroup className="formGroup">
+                  <Select label="Select origin account" id="fromAccount" ref={register} />
+                </FormGroup>
 
-                <Input label="Amount" register={register} required />
-                <input type="submit" />
+                <FormGroup>
+                  <Input
+                    label="Destination account"
+                    name="destination"
+                    id="toAccount"
+                    register={register}
+                    required
+                  />
+                </FormGroup>
+
+                <FormGroup>
+                  <Input label="Amount" id="amount" register={register} required />
+                </FormGroup>
+
+                <Button className="float-right" style={{marginLeft:"5px"}} outline color="secondary" type="reset">Cancel</Button>
+                <Button className="float-right" color="primary">Transfer</Button>{' '}
               </form>
             </CardBody>
           </Card>
         </Col>
-        <Col sm="12" md="8">
-        </Col>
+        <Col sm="12" md="8"></Col>
         <Col sm="12" md="12">
           {Object.entries(result).map(([key, value]) => {
             return (
@@ -117,22 +135,20 @@ const Transfer = () => {
                 <Table bordered size="sm">
                   <thead>
                     <tr>
-                      <th>fromAccount</th>
-                      <th>toAccount</th>
-                      <th>sentAt</th>
-                      <th>currency</th>
-                      <th>amount</th>
+                      <th>Origin account</th>
+                      <th>Destination account</th>
+                      <th>Transfer date</th>
+                      <th>Amount</th>
                     </tr>
                   </thead>
                   <tbody>
                     {value.map((val, index) => {
                       return (
                         <tr key={index}>
-                          <td key="1">{value[index].fromAccount}</td>
-                          <td key="2">{value[index].toAccount}</td>
-                          <td key="3">{value[index].sentAt}</td>
-                          <td key="4">{value[index].currency}</td>
-                          <td key="5">{value[index].amount}</td>
+                          <td>{value[index].fromAccount}</td>
+                          <td>{value[index].toAccount}</td>
+                          <td>{value[index].sentAt}</td>
+                          <td>{value[index].currency+""+value[index].amount}</td>
                         </tr>
                       );
                     })}

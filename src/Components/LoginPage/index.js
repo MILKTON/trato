@@ -1,11 +1,13 @@
-import * as React from "react";
+import React, {useContext} from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { Row } from "reactstrap";
 import { Button } from "reactstrap";
+import { UserContext } from "../../userContext";
 
 const Login = () => {
   const history = useHistory();
+  const { setUser } = useContext(UserContext);
   const { register, handleSubmit, formState, errors } = useForm({
     mode: "onChange"
   });
@@ -13,8 +15,8 @@ const Login = () => {
   const onSubmit = data => {
     history.push({
       pathname: "/",
-      state: { name: data.name }
     });
+    setUser(data.name)
   };
 
   const upperCase = value => {
@@ -32,11 +34,16 @@ const Login = () => {
     return ret;
   };
 
-  const sequence = value => {
-    //const ret = false //Hay secuencia
-    const ret = true; //No hay secuencia
-    return ret;
+  const sequence = s => {
+    for(let i in s) {
+      if (+s[+i+1] === +s[i]+1 && +s[+i+2] === +s[i]+2) return false;
+    }
+    for(let j in s){
+      if (String.fromCharCode(s.charCodeAt(j)+1) === s[+j+1] && String.fromCharCode(s.charCodeAt(j)+2) === s[+j+2]) return false;
+    }
+    return true;
   };
+  
 
   return (
     <Row className="m-0 h-100">
@@ -57,11 +64,11 @@ const Login = () => {
                 required: "You must specify a username",
                 maxLength: {
                   value: 20,
-                  message: "Name must have max 20 characters"
+                  message: "Password must have max 20 characters"
                 },
                 minLength: {
                   value: 8,
-                  message: "Name must have at least 8 characters"
+                  message: "Username shall have a minimum length of 8 characters"
                 }
               })}
             />
@@ -105,16 +112,16 @@ const Login = () => {
                 <div className="error">longitud maxima alcanzada</div>
               )}
               {errors.password && errors.password.type === "upperCase" && (
-                <div className="error">Mayuscula</div>
+                <div className="error">Password must contain at least one uppercase</div>
               )}
               {errors.password && errors.password.type === "lowerCase" && (
-                <div className="error">Minuscula</div>
+                <div className="error">Password must contain at least one lowercase</div>
               )}
               {errors.password && errors.password.type === "specialChar" && (
-                <div className="error">Caracter especial</div>
+                <div className="error">Password must contain at least one special char</div>
               )}
               {errors.password && errors.password.type === "sequence" && (
-                <div className="error">Se detecto secuencia</div>
+                <div className="error">Char sequence detected</div>
               )}
             </small>
             <Button
